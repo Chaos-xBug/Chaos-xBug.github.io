@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>python实现IQA图像质量评价 | Clerk.Max(well);</title><meta name="keywords" content="opencv,图像处理"><meta name="author" content="mxw"><meta name="copyright" content="mxw"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="全称：Image Quality Assessment 百度百科 IQA：https:&#x2F;&#x2F;baike.baidu.com&#x2F;item&#x2F;IQA&#x2F;19453034?fr&#x3D;aladdin  主观评价主观评价方法主要可分为两种：绝对评价和相对评价。 但是实现起来都有困难，这里先不考虑。 客观评价全参考基于图像像素统计基础 峰值信噪比（PSNR）：PSNR值越大，表明待评图像与参考图像之间的失真较小，图像质量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python实现IQA图像质量评价">
+<meta property="og:url" content="https://lht.wiki/20210815-img-report/index.html">
+<meta property="og:site_name" content="Clerk.Max(well);">
+<meta property="og:description" content="全称：Image Quality Assessment 百度百科 IQA：https:&#x2F;&#x2F;baike.baidu.com&#x2F;item&#x2F;IQA&#x2F;19453034?fr&#x3D;aladdin  主观评价主观评价方法主要可分为两种：绝对评价和相对评价。 但是实现起来都有困难，这里先不考虑。 客观评价全参考基于图像像素统计基础 峰值信噪比（PSNR）：PSNR值越大，表明待评图像与参考图像之间的失真较小，图像质量">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111040845503.png">
+<meta property="article:published_time" content="2021-08-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-14T16:00:00.000Z">
+<meta property="article:author" content="mxw">
+<meta property="article:tag" content="opencv">
+<meta property="article:tag" content="图像处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111040845503.png"><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="canonical" href="https://lht.wiki/20210815-img-report/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'python实现IQA图像质量评价',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-15 00:00:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper/swiper/swiper.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper/swiper/swiperstyle.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-double-row-display@1.00/cardlistpost.min.css"/>
+<style>#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags:before {content:"\A";
+  white-space: pre;}#recent-posts > .recent-post-item >.recent-post-info > .article-meta-wrap > .tags > .article-meta__separator{display:none}</style>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/main/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">29</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Clerk.Max(well);</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">python实现IQA图像质量评价</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-14T16:00:00.000Z" title="发表于 2021-08-15 00:00:00">2021-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-14T16:00:00.000Z" title="更新于 2021-08-15 00:00:00">2021-08-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="python实现IQA图像质量评价"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/20210815-img-report/#post-comment"><span class="gitalk-comment-count"></span></a></span></div></div></div><article class="post-content" id="article-container"><p>全称：Image Quality Assessment</p>
+<p>百度百科 IQA：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/IQA/19453034?fr=aladdin">https://baike.baidu.com/item/IQA/19453034?fr=aladdin</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111040845503.png" alt="img"></p>
+<h3 id="主观评价"><a href="#主观评价" class="headerlink" title="主观评价"></a>主观评价</h3><p>主观评价方法主要可分为两种：绝对评价和相对评价。</p>
+<p>但是实现起来都有困难，这里先不考虑。</p>
+<h3 id="客观评价"><a href="#客观评价" class="headerlink" title="客观评价"></a>客观评价</h3><h4 id="全参考"><a href="#全参考" class="headerlink" title="全参考"></a>全参考</h4><h5 id="基于图像像素统计基础"><a href="#基于图像像素统计基础" class="headerlink" title="基于图像像素统计基础"></a>基于图像像素统计基础</h5><ul>
+<li>峰值信噪比（PSNR）：PSNR值越大，表明待评图像与参考图像之间的失真较小，图像质量较好</li>
+<li>均方误差（MSE）：MSE的值越小，表明图像质量越好</li>
+</ul>
+<h6 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import cv2 as cv</span><br><span class="line">import numpy as np</span><br><span class="line">import math</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 均方误差（MSE）：MSE的值越小，表明图像质量越好</span><br><span class="line">def get_mse(img1, img2):</span><br><span class="line">    return np.mean((img1 / 255. - img2 / 255.) ** 2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 峰值信噪比（PSNR）：PSNR值越大，表明待评图像与参考图像之间的失真较小，图像质量较好</span><br><span class="line"># 基准为30dB，小于30为劣质</span><br><span class="line">def get_psnr(img1, img2):</span><br><span class="line">    mse = get_mse(img1, img2)</span><br><span class="line">    if mse &lt; 1.0e-10:</span><br><span class="line">        return 100</span><br><span class="line">    pixel_max = 1</span><br><span class="line">    return 20 * math.log10(pixel_max / math.sqrt(mse))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    origin_img = cv.imread(&#x27;img.png&#x27;, 1)</span><br><span class="line">    new_img = cv.imread(&#x27;denoised_img_noise.png&#x27;, 1)</span><br><span class="line">    print(&#x27;MSE:&#x27;, get_mse(origin_img, new_img))</span><br><span class="line">    print(&#x27;PSNR:&#x27;, get_psnr(origin_img, new_img))</span><br></pre></td></tr></table></figure>
+
+<h6 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h6><blockquote>
+<p>MSE: 0.0004777804926332579 </p>
+<p>PSNR: 33.20771586094474</p>
+</blockquote>
+<p>从结果可以看出，上面测试使用的降噪后的图片质量还是可以的</p>
+<h5 id="基于信息论基础"><a href="#基于信息论基础" class="headerlink" title="基于信息论基础"></a>基于信息论基础</h5><blockquote>
+<p>基于信息论中信息熵基础，互信息被广泛用来评价图像质量。近些年，Sheikh和Bovik等人提出来了信息保真度准则（Information Fidelity Criterion,IFC）和视觉信息保真度（Visual Information Fidelity,VIF）两种算法。它们通过计算待评图像与参考图像之间的互信息来衡量待评图像的质量优劣。这两种方法具有一定的理论支撑，在信息保真度上拓展了图像与人眼之间的联系，但是这类方法对于图像的结构信息没有反应。</p>
+</blockquote>
+<p>关于信息保真度准则（Information Fidelity Criterion,IFC）和视觉信息保真度（Visual Information Fidelity,VIF）这两种算法网上很难搜到合适的资料，即便能找到个别也都是matlab的，IFC方法到现在还没办法实现，下面是VIF方法。</p>
+<h6 id="代码示例-1"><a href="#代码示例-1" class="headerlink" title="代码示例"></a>代码示例</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">import numpy</span><br><span class="line">import scipy.signal</span><br><span class="line">import scipy.ndimage</span><br><span class="line"></span><br><span class="line">__all__ = [&#x27;compare_vifp&#x27;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def compare_vifp(ref, dist):</span><br><span class="line">    sigma_nsq = 2</span><br><span class="line">    eps = 1e-10</span><br><span class="line"></span><br><span class="line">    num = 0.0</span><br><span class="line">    den = 0.0</span><br><span class="line">    for scale in range(1, 5):</span><br><span class="line"></span><br><span class="line">        N = 2 ** (4 - scale + 1) + 1</span><br><span class="line">        sd = N / 5.0</span><br><span class="line"></span><br><span class="line">        if scale &gt; 1:</span><br><span class="line">            ref = scipy.ndimage.gaussian_filter(ref, sd)</span><br><span class="line">            dist = scipy.ndimage.gaussian_filter(dist, sd)</span><br><span class="line">            ref = ref[::2, ::2]</span><br><span class="line">            dist = dist[::2, ::2]</span><br><span class="line"></span><br><span class="line">        mu1 = scipy.ndimage.gaussian_filter(ref, sd)</span><br><span class="line">        mu2 = scipy.ndimage.gaussian_filter(dist, sd)</span><br><span class="line">        mu1_sq = mu1 * mu1</span><br><span class="line">        mu2_sq = mu2 * mu2</span><br><span class="line">        mu1_mu2 = mu1 * mu2</span><br><span class="line">        sigma1_sq = scipy.ndimage.gaussian_filter(ref * ref, sd) - mu1_sq</span><br><span class="line">        sigma2_sq = scipy.ndimage.gaussian_filter(dist * dist, sd) - mu2_sq</span><br><span class="line">        sigma12 = scipy.ndimage.gaussian_filter(ref * dist, sd) - mu1_mu2</span><br><span class="line"></span><br><span class="line">        sigma1_sq[sigma1_sq &lt; 0] = 0</span><br><span class="line">        sigma2_sq[sigma2_sq &lt; 0] = 0</span><br><span class="line"></span><br><span class="line">        g = sigma12 / (sigma1_sq + eps)</span><br><span class="line">        sv_sq = sigma2_sq - g * sigma12</span><br><span class="line"></span><br><span class="line">        g[sigma1_sq &lt; eps] = 0</span><br><span class="line">        sv_sq[sigma1_sq &lt; eps] = sigma2_sq[sigma1_sq &lt; eps]</span><br><span class="line">        sigma1_sq[sigma1_sq &lt; eps] = 0</span><br><span class="line"></span><br><span class="line">        g[sigma2_sq &lt; eps] = 0</span><br><span class="line">        sv_sq[sigma2_sq &lt; eps] = 0</span><br><span class="line"></span><br><span class="line">        sv_sq[g &lt; 0] = sigma2_sq[g &lt; 0]</span><br><span class="line">        g[g &lt; 0] = 0</span><br><span class="line">        sv_sq[sv_sq &lt;= eps] = eps</span><br><span class="line"></span><br><span class="line">        num += numpy.sum(numpy.log10(1 + g * g * sigma1_sq / (sv_sq + sigma_nsq)))</span><br><span class="line">        den += numpy.sum(numpy.log10(1 + sigma1_sq / sigma_nsq))</span><br><span class="line"></span><br><span class="line">    vifp = num / den</span><br><span class="line"></span><br><span class="line">    if numpy.isnan(vifp):</span><br><span class="line">        return 1.0</span><br><span class="line">    else:</span><br><span class="line">        return vifp</span><br></pre></td></tr></table></figure>
+
+<h6 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h6><p>运用相同的测试图片，可以得到结果：</p>
+<blockquote>
+<p>VIF: 0.9758460769325894</p>
+</blockquote>
+<h5 id="基于结构信息基础"><a href="#基于结构信息基础" class="headerlink" title="基于结构信息基础"></a>基于结构信息基础</h5><ul>
+<li>SSIM：根据图像像素间的相关性构造出参考图像与待评图像之间的结构相似性，SSIM值越大，图像质量越好</li>
+</ul>
+<p>PS：至此，找到更合理的代码方法</p>
+<h6 id="代码示例-2"><a href="#代码示例-2" class="headerlink" title="代码示例"></a>代码示例</h6><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import cv2 as cv</span><br><span class="line">import numpy as np</span><br><span class="line">import math</span><br><span class="line">from skimage.metrics import mean_squared_error</span><br><span class="line">from skimage.metrics import peak_signal_noise_ratio</span><br><span class="line">from skimage.metrics import structural_similarity</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 均方误差（MSE）：MSE的值越小，表明图像质量越好</span><br><span class="line">def get_mse(img1, img2):</span><br><span class="line">    return np.mean((img1 / 255. - img2 / 255.) ** 2)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if __name__ == &#x27;__main__&#x27;:</span><br><span class="line">    origin_img = cv.imread(&#x27;img.png&#x27;, 1)</span><br><span class="line">    new_img = cv.imread(&#x27;denoised_img_noise.png&#x27;, 1)</span><br><span class="line"></span><br><span class="line">    # 均方误差（MSE）：MSE的值越小，表明图像质量越好</span><br><span class="line">    mse = get_mse(origin_img, new_img)</span><br><span class="line">    # 峰值信噪比（PSNR）：PSNR值越大，表明待评图像与参考图像之间的失真较小，图像质量较好</span><br><span class="line">    # 基准为30dB，小于30为劣质</span><br><span class="line">    psnr = peak_signal_noise_ratio(origin_img, new_img)</span><br><span class="line">    # 结构相似度（Structural Similarity,SSIM），SSIM值越大，图像质量越好</span><br><span class="line">    ssim = structural_similarity(origin_img, new_img, multichannel=True)</span><br><span class="line"></span><br><span class="line">    print(&#x27;MSE:&#x27;, mse)</span><br><span class="line">    print(&#x27;PSNR:&#x27;, psnr)</span><br><span class="line">    print(&#x27;SSIM:&#x27;, ssim)</span><br></pre></td></tr></table></figure>
+
+<h6 id="结果-2"><a href="#结果-2" class="headerlink" title="结果"></a>结果</h6><blockquote>
+<p>MSE: 0.0004777804926332579 </p>
+<p>PSNR: 33.20771586094474 </p>
+<p>SSIM: 0.9570612590498769</p>
+</blockquote>
+<h6 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h6><p>我的代码中有这样的一行：<code>from skimage.metrics import mean_squared_error</code></p>
+<p>但是，在下方却没有用到<code>mean_squared_error</code>这一函数，这是因为在测试时，使用<code>mean_squared_error</code>函数得到的结果（30+）与自己写的<code>get_mse</code>函数的结果（0+）大相径庭，而网上的资源大多使用类似于<code>get_mse</code>的方法，而对<code>mean_squared_error</code>方法所提甚少，且从结果看，MSE算法的值也是应该越小越好，所以我暂时不使用<code>mean_squared_error</code>函数</p>
+<h4 id="部分参考"><a href="#部分参考" class="headerlink" title="部分参考"></a>部分参考</h4><blockquote>
+<p>部分参考也成为半参考，它是以理想图像的部分特征信息作为参考，对待评图像进行比较分析，从而得到图像质量评价结果。由于所参考的信息是从图像中提取出来的特征，所以它必须要先提取待评图像和理想图像的部分特征信息，通过比较提取出的部分信息对待评图像进行质量评估。部分参考方法可分为基于原始图像特征方法、基于数字水印方法和基于Wavelet域统计模型的方法等。因为部分参考质量评价依赖于图像的部分特征，与图像整体相比而言，数据量下降了很多，目前应用比较集中在图像传输系统中。</p>
+</blockquote>
+<p>这部分内容暂时也没有头绪，先放过</p>
+<h4 id="无参考"><a href="#无参考" class="headerlink" title="无参考"></a>无参考</h4><blockquote>
+<p>无参考方法也称为首评价方法，因为一般的理想图像很难获得，所以这种完全脱离了对理想参考图像依赖的质量评价方法应用较为广泛。无参考方法一般都是基于图像统计特性。</p>
+</blockquote>
+<ul>
+<li>均值</li>
+<li>标准差</li>
+<li>平均梯度</li>
+<li>熵</li>
+<li>。。。。。。</li>
+</ul>
+<h5 id="我的理解"><a href="#我的理解" class="headerlink" title="我的理解"></a>我的理解</h5><p>所谓无参考方法，就是只对现有的经过处理的图片进行分析，而不与原图比较。评判方法其实就是是否符合理想图像的特征（与寻找噪声的方式相似：符合噪声特征的像素点就会被判定为噪声）。</p>
+<p>个人认为，这样的方法较为适用于无法得到原图，或者原图存在不可忽略的噪声的情况。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">mxw</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://lht.wiki/20210815-img-report/">https://lht.wiki/20210815-img-report/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://lht.wiki" target="_blank">Clerk.Max(well);</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/opencv/">opencv</a><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111040845503.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/20210929-img-report/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111040850684.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">图像处理20210929</div></div></a></div><div class="next-post pull-right"><a href="/20210808-img-report/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111040837824.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">图像处理20210808</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/20210307-img-report/" title="图像处理20210307"><img class="cover" src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111011525076.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-07</div><div class="title">图像处理20210307</div></div></a></div><div><a href="/20210228-img-report/" title="图像处理20210228"><img class="cover" src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202110280846615.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-28</div><div class="title">图像处理20210228</div></div></a></div><div><a href="/20210411-img-report/" title="图像处理20210411"><img class="cover" src="https://i.loli.net/2021/04/18/9jh7bfHXSYm5oGT.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-11</div><div class="title">图像处理20210411</div></div></a></div><div><a href="/20210418-img-report/" title="图像处理20210418"><img class="cover" src="https://i.loli.net/2021/04/18/Lp1PkSxDM6NH9gs.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-18</div><div class="title">图像处理20210418</div></div></a></div><div><a href="/20210314-img-report/" title="图像处理20210314"><img class="cover" src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111011531118.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-14</div><div class="title">图像处理20210314</div></div></a></div><div><a href="/20210425-img-report/" title="图像处理20210425"><img class="cover" src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111011545066.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-25</div><div class="title">图像处理20210425</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A7%82%E8%AF%84%E4%BB%B7"><span class="toc-number">1.</span> <span class="toc-text">主观评价</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E8%A7%82%E8%AF%84%E4%BB%B7"><span class="toc-number">2.</span> <span class="toc-text">客观评价</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%A8%E5%8F%82%E8%80%83"><span class="toc-number">2.1.</span> <span class="toc-text">全参考</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%9B%BE%E5%83%8F%E5%83%8F%E7%B4%A0%E7%BB%9F%E8%AE%A1%E5%9F%BA%E7%A1%80"><span class="toc-number">2.1.1.</span> <span class="toc-text">基于图像像素统计基础</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">代码示例</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">结果</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E4%BF%A1%E6%81%AF%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="toc-number">2.1.2.</span> <span class="toc-text">基于信息论基础</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">代码示例</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C-1"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">结果</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%BB%93%E6%9E%84%E4%BF%A1%E6%81%AF%E5%9F%BA%E7%A1%80"><span class="toc-number">2.1.3.</span> <span class="toc-text">基于结构信息基础</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-2"><span class="toc-number">2.1.3.1.</span> <span class="toc-text">代码示例</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%BB%93%E6%9E%9C-2"><span class="toc-number">2.1.3.2.</span> <span class="toc-text">结果</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.3.</span> <span class="toc-text">存在的问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E5%88%86%E5%8F%82%E8%80%83"><span class="toc-number">2.2.</span> <span class="toc-text">部分参考</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E5%8F%82%E8%80%83"><span class="toc-number">2.3.</span> <span class="toc-text">无参考</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">2.3.1.</span> <span class="toc-text">我的理解</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By mxw</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function addGitalkSource () {
+  const ele = document.createElement('link')
+  ele.rel = 'stylesheet'
+  ele.href= 'https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css'
+  document.getElementsByTagName('head')[0].appendChild(ele)
+}
+
+function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '7af662bdffe025ce937b',
+      clientSecret: '739582b4b6a75ea5356640f88ba3a096abd694ba',
+      repo: 'gitalk',
+      owner: 'Chaos-xBug',
+      admin: ['Chaos-xBug'],
+      id: 'f5af6489b3c40a043e2abdd9a6dc97c2',
+      language: 'zh-CN',
+      perPage: 10,
+      distractionFreeMode: false,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    addGitalkSource()
+    getScript('https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Gitalk' === 'Gitalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='/'|| '/' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img id="card-clock-loading" src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='/'|| '/' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script> <script data-pjax>if(document.getElementById('recent-posts') && location.pathname =='/'){
+    
+    var parent = document.getElementById('recent-posts');
+    var child = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载swiper')
+    parent.insertAdjacentHTML("afterbegin",child)}
+     </script>
+<script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper/swiper/swiper.min.js"></script>
+<script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-swiper@0.18/swiper/swiperindex.js"></script>
+<style></style>
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?Chaos-xBug";
+            var git_color =['#ebedf0', '#fdcdec', '#fc9bd9', '#fa6ac5', '#f838b2', '#f5089f', '#c4067e', '#92055e', '#540336', '#48022f', '#30021f'];
+            var git_user ="Chaos-xBug";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="height:100%;display: flex;align-items: center;justify-content: center;"><svg style="height:50px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:248px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
