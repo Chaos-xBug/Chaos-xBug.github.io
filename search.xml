@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>about</title>
+      <link href="/about/"/>
+      <url>/about/</url>
+      
+        <content type="html"><![CDATA[<hr><p>网站名称：Clerk.Max(well);</p><p>网站地址：<a href="https://lht.wiki/">https://lht.wiki/</a></p><p>头像：<a href="https://lht.wiki/img/main/avatar.jpg">https://lht.wiki/img/main/avatar.jpg</a></p><p>描述：假装学习，留点痕迹</p><hr>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>栈溢出与基本ROP</title>
       <link href="/20211113-ctf-stackoverflow-baseROP/"/>
       <url>/20211113-ctf-stackoverflow-baseROP/</url>
