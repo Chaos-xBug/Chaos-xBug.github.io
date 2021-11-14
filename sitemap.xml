@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lht.wiki/20211112-ctf-ciscn_2019_c_1/</loc>
+    
+    <lastmod>2021-11-13</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lht.wiki/about/index.html</loc>
     
     <lastmod>2021-11-13</lastmod>
@@ -26,13 +33,6 @@
     <loc>https://lht.wiki/20211113-ctf-babyrop/</loc>
     
     <lastmod>2021-11-12</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://lht.wiki/20211112-ctf-ciscn_2019_c_1/</loc>
-    
-    <lastmod>2021-11-11</lastmod>
     
   </url>
   
