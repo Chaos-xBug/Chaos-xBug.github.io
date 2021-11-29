@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PWNABLE-fd</title>
+      <link href="/20211129-ctf-fd/"/>
+      <url>/20211129-ctf-fd/</url>
+      
+        <content type="html"><![CDATA[<h1 id="PWNABLE-fd"><a href="#PWNABLE-fd" class="headerlink" title="PWNABLE-fd"></a>PWNABLE-fd</h1><p>这道题比较简单，但我还是从里面学到了一些我不清晰的C语言知识</p><h2 id="题目信息"><a href="#题目信息" class="headerlink" title="题目信息"></a>题目信息</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291620293.png" alt="image-20211129161641566"></p><h2 id="ssh连接"><a href="#ssh连接" class="headerlink" title="ssh连接"></a>ssh连接</h2><p>根据题目信息给的连接方式（ssh）连接到目标机器</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh fd@pwnable.kr -p2222</span><br></pre></td></tr></table></figure><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291619647.png" alt="image-20211129161931529"></p><h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291621898.png" alt="image-20211129162154208"></p><p>不出所料，flag读取文件的权限果然是没有的</p><h2 id="查看fd-c文件"><a href="#查看fd-c文件" class="headerlink" title="查看fd.c文件"></a>查看fd.c文件</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291630377.png" alt="image-20211129163002538"></p><h3 id="分析代码"><a href="#分析代码" class="headerlink" title="分析代码"></a>分析代码</h3><ul><li><p><code>argc</code>：参数个数</p></li><li><p><code>argv[]</code>：参数数组</p></li><li><p><code>envp[]</code>：环境参数数组</p></li><li><pre><code class="c">if(argc&lt;2)&#123;                printf(&quot;pass argv[1] a number\n&quot;);                return 0;        &#125;</code></pre><p>只要大于一个参数就可以绕过这个if语句</p></li><li><p><code>atoi</code>函数：将字符串转化为int型</p></li><li><p><code>read</code>函数：<code>ssize_t read(int fd, void * buf, size_t count);</code></p><p><code>fd</code>为文件指针，但有以下几种特例：</p><p><code>fd == 0</code>：从标准输入读取</p><p><code>fd == 1</code>：从标准输出读取</p><p><code>fd == 2</code>：从标准错误输出读取</p><p><code>buf</code>为读取内容的存放空间</p><p><code>count</code>为读入字节数</p></li><li><p><code>if(!strcmp(&quot;LETMEWIN\n&quot;, buf))</code>：当<code>buf</code>内容与前者相同时，条件成立</p></li></ul><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol><li>使<code>fd == 0</code>：即<code>argv[1] == 4660</code>（0x1234的10进制），让读取内容来源是我们的输入内容</li><li>输入<code>LETMEWIN</code></li></ol><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291903061.png" alt="image-20211129190341521"></p><p>得到结果</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>边沿J-K触发器设计实验</title>
       <link href="/20211120-DC-EdgeJKFF_74LS76/"/>
       <url>/20211120-DC-EdgeJKFF_74LS76/</url>
@@ -1197,19 +1224,6 @@
       <url>/hello-world/</url>
       
         <content type="html"><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202110251233406.png" alt="p2684995706"></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title></title>
-      <link href="/20211129-ctf-fd/"/>
-      <url>/20211129-ctf-fd/</url>
-      
-        <content type="html"><![CDATA[<h1 id="PWNABLE-fd"><a href="#PWNABLE-fd" class="headerlink" title="PWNABLE-fd"></a>PWNABLE-fd</h1><p>这道题比较简单，但我还是从里面学到了一些我不清晰的C语言知识</p><h2 id="题目信息"><a href="#题目信息" class="headerlink" title="题目信息"></a>题目信息</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291620293.png" alt="image-20211129161641566"></p><h2 id="ssh连接"><a href="#ssh连接" class="headerlink" title="ssh连接"></a>ssh连接</h2><p>根据题目信息给的连接方式（ssh）连接到目标机器</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh fd@pwnable.kr -p2222</span><br></pre></td></tr></table></figure><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291619647.png" alt="image-20211129161931529"></p><h2 id="查看目录文件"><a href="#查看目录文件" class="headerlink" title="查看目录文件"></a>查看目录文件</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291621898.png" alt="image-20211129162154208"></p><p>不出所料，flag读取文件的权限果然是没有的</p><h2 id="查看fd-c文件"><a href="#查看fd-c文件" class="headerlink" title="查看fd.c文件"></a>查看fd.c文件</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291630377.png" alt="image-20211129163002538"></p><h3 id="分析代码"><a href="#分析代码" class="headerlink" title="分析代码"></a>分析代码</h3><ul><li><p><code>argc</code>：参数个数</p></li><li><p><code>argv[]</code>：参数数组</p></li><li><p><code>envp[]</code>：环境参数数组</p></li><li><pre><code class="c">if(argc&lt;2)&#123;                printf(&quot;pass argv[1] a number\n&quot;);                return 0;        &#125;</code></pre><p>只要大于一个参数就可以绕过这个if语句</p></li><li><p><code>atoi</code>函数：将字符串转化为int型</p></li><li><p><code>read</code>函数：<code>ssize_t read(int fd, void * buf, size_t count);</code></p><p><code>fd</code>为文件指针，但有以下几种特例：</p><p><code>fd == 0</code>：从标准输入读取</p><p><code>fd == 1</code>：从标准输出读取</p><p><code>fd == 2</code>：从标准错误输出读取</p><p><code>buf</code>为读取内容的存放空间</p><p><code>count</code>为读入字节数</p></li><li><p><code>if(!strcmp(&quot;LETMEWIN\n&quot;, buf))</code>：当<code>buf</code>内容与前者相同时，条件成立</p></li></ul><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol><li>使<code>fd == 0</code>：即<code>argv[1] == 4660</code>（0x1234的10进制），让读取内容来源是我们的输入内容</li><li>输入<code>LETMEWIN</code></li></ol><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202111291903061.png" alt="image-20211129190341521"></p><p>得到结果</p>]]></content>
       
       
       
