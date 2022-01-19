@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>BUUCTF-PWN-root_me_basic_rop</title>
+      <link href="/20220119-ctf-flag/"/>
+      <url>/20220119-ctf-flag/</url>
+      
+        <content type="html"><![CDATA[<h1 id="PWNABLE-flag"><a href="#PWNABLE-flag" class="headerlink" title="PWNABLE-flag"></a>PWNABLE-flag</h1><h2 id="题目信息"><a href="#题目信息" class="headerlink" title="题目信息"></a>题目信息</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191933404.png" alt="image-20220119193300109"></p><p>hint直接说，进行逆向就行了，不需要打远程</p><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191257848.png" alt="image-20220119125716219"></p><p>看到最后一行有<code>Packed with UPX</code>，所以需要脱壳处理</p><h2 id="安装UPX"><a href="#安装UPX" class="headerlink" title="安装UPX"></a>安装UPX</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191258838.png" alt="image-20220119125857154"></p><h2 id="脱壳"><a href="#脱壳" class="headerlink" title="脱壳"></a>脱壳</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191934395.png" alt="image-20220119193438812"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p>脱壳前也是可以用IDA打开看的，但是没用</p><p>脱壳后：</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191936758.png" alt="image-20220119193619223"></p><p>跟踪<code>flag</code>变量</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191937843.png" alt="image-20220119193706379"></p><p>跟踪<code>aUpxSoundsLikeA</code></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191938672.png" alt="image-20220119193801193"></p><p>flag就是以<code>:)</code>结尾的字符串</p><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UPX...? sounds like a delivery service :)</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>BUUCTF-PWN-root_me_basic_rop</title>
+      <link href="/20220119-ctf-root_me_basic_rop/"/>
+      <url>/20220119-ctf-root_me_basic_rop/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-root-me-basic-rop"><a href="#BUUCTF-PWN-root-me-basic-rop" class="headerlink" title="BUUCTF-PWN-root_me_basic_rop"></a>BUUCTF-PWN-root_me_basic_rop</h1><p>这道题很简单，因此嫖了一血100分</p><p>直接上图，属于是懂得都懂了</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191120775.png" alt="image-20220119111959562"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202201191121141.png" alt="image-20220119112106421"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF-PWN-ciscn_2019_n_5</title>
       <link href="/20220118-ctf-ciscn_2019_n_5/"/>
       <url>/20220118-ctf-ciscn_2019_n_5/</url>
