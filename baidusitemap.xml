@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://lht.wiki/20220202-ctf-pwn2/</loc>
+    <lastmod>2022-02-01</lastmod>
+  </url>
+  <url>
     <loc>https://lht.wiki/20220201-ctf-jarvisoj_fm/</loc>
     <lastmod>2022-01-31</lastmod>
   </url>
