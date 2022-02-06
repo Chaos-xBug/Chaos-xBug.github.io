@@ -1651,6 +1651,35 @@
     
     
     <entry>
+      <title>卸载360天擎-奇安信</title>
+      <link href="/20210503-360tianqing/"/>
+      <url>/20210503-360tianqing/</url>
+      
+        <content type="html"><![CDATA[<h2 id="360天擎是什么"><a href="#360天擎是什么" class="headerlink" title="360天擎是什么"></a>360天擎是什么</h2><p>具体可以参考：<a href="https://baike.baidu.com/item/360%E5%A4%A9%E6%93%8E/13675946?fr=aladdin">百度：360天擎</a><br>总之，一些单位里为了安全防护，会在单位的电脑上安装360天擎，如果你想用自己的笔记本电脑连上单位的网络的话，也会要求你安装。不安装就连不上网络，但安装之后，卸载又是一个很大的难题。</p><h2 id="用什么卸载"><a href="#用什么卸载" class="headerlink" title="用什么卸载"></a>用什么卸载</h2><p>其实网上会有很多强力卸载软件，甚至有些会强力到可以卸载系统文件，这类软件不建议使用（如果用的明白，请自便）。<br>还有一些卸载方案是通过启动盘之类的办法，总之比较暴力，有条件可以尝试。</p><h3 id="无效方式"><a href="#无效方式" class="headerlink" title="无效方式"></a>无效方式</h3><p>如，腾讯管家自带的软件管理</p><h3 id="有效方式"><a href="#有效方式" class="headerlink" title="有效方式"></a>有效方式</h3><p>如，联想电脑管家，和微软自带的卸载，如下图：<br><img src="https://img-blog.csdnimg.cn/20210503151018715.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYW9zMHRoZW9yeQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p><blockquote><p>点击右键 -&gt; 卸载 <del>-&gt; 完成？</del> </p></blockquote><p>不不不，这只是开始<br>这流氓软件会弹出一个对话框，伸手向你讨要密码（好阴间，从没见过这样的。。。）<br>那么我们试试删除本地文件？<br>结果发现我没有权限。。。<br>但我还是找到了一个有古怪的文件，这里给出相对路径：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\360Safe\EntClient\conf\EntBase.dat</span><br></pre></td></tr></table></figure><p>用记事本打开，得到：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[base]</span><br><span class="line">persistent_connetion=close</span><br><span class="line">show_tip=1</span><br><span class="line">net_env=4</span><br><span class="line">communication_interval=300</span><br><span class="line">[api_frequency]</span><br><span class="line">checkupdate=180</span><br><span class="line">get_client_tasks=180</span><br><span class="line">getconf=180</span><br><span class="line">svr_init_info=180</span><br><span class="line">update_client_info=60</span><br><span class="line">[protect]</span><br><span class="line">uienable=1</span><br><span class="line">qtenable=0</span><br><span class="line">uimode=1</span><br><span class="line">qtmode=1</span><br><span class="line">ui_encrypt_type=0</span><br><span class="line">qt_encrypt_type=0</span><br><span class="line">uipass=bf0a3d104bae370da5427a5de2fc5124</span><br><span class="line">qtpass=</span><br><span class="line">[admin]</span><br><span class="line">name=</span><br><span class="line">phone=</span><br><span class="line">mail=</span><br></pre></td></tr></table></figure><p>我猜测<code>uipass</code>那一行可能会是密码吧<br>但是估计会有自己的加密方式（如有大佬知道，就谢谢分享）</p><blockquote><p>“这些大公司真不顾体面。”——《品质》</p></blockquote><p>既然不能解开密码，那我把等号后面的密码删掉总可以吧，结果我没有修改文件的权限，这显然是因为360天擎开了权限保护之类的东西</p><p>果然，在360天擎的设置里是可以把它关掉的<br><img src="https://img-blog.csdnimg.cn/20210503152939180.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYW9zMHRoZW9yeQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20210503153050423.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYW9zMHRoZW9yeQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>把自我防护关掉，就可以修改文件了<br>修改后：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[base]</span><br><span class="line">persistent_connetion=close</span><br><span class="line">show_tip=1</span><br><span class="line">net_env=4</span><br><span class="line">communication_interval=300</span><br><span class="line">[api_frequency]</span><br><span class="line">checkupdate=180</span><br><span class="line">get_client_tasks=180</span><br><span class="line">getconf=180</span><br><span class="line">svr_init_info=180</span><br><span class="line">update_client_info=60</span><br><span class="line">[protect]</span><br><span class="line">uienable=1</span><br><span class="line">qtenable=0</span><br><span class="line">uimode=1</span><br><span class="line">qtmode=1</span><br><span class="line">ui_encrypt_type=0</span><br><span class="line">qt_encrypt_type=0</span><br><span class="line">uipass=</span><br><span class="line">qtpass=</span><br><span class="line">[admin]</span><br><span class="line">name=</span><br><span class="line">phone=</span><br><span class="line">mail=</span><br></pre></td></tr></table></figure><p>将文件保存后，就可以卸载360天擎了<br>一起来享受这一刻快乐：<br><img src="https://img-blog.csdnimg.cn/20210503153645864.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYW9zMHRoZW9yeQ==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 未分类 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 360 </tag>
+            
+            <tag> 天擎 </tag>
+            
+            <tag> 奇安信 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>图像处理20210502</title>
       <link href="/20210502-img-report/"/>
       <url>/20210502-img-report/</url>
