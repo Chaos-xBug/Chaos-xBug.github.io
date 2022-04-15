@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lht.wiki/20220411-img-report/</loc>
+    
+    <lastmod>2022-04-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lht.wiki/20220328-img-report/</loc>
+    
+    <lastmod>2022-03-27</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://lht.wiki/20220321-img-report/</loc>
+    
+    <lastmod>2022-03-20</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://lht.wiki/20220309-img-report/</loc>
     
     <lastmod>2022-03-08</lastmod>
@@ -691,6 +712,27 @@
   
   <url>
     <loc>https://lht.wiki/tags/fmt/</loc>
+    <lastmod>2022-04-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lht.wiki/tags/%E5%8C%BA%E5%88%86%E5%BA%A6/</loc>
+    <lastmod>2022-04-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lht.wiki/tags/%E7%9B%B8%E4%BC%BC%E5%BA%A6/</loc>
+    <lastmod>2022-04-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lht.wiki/tags/%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B/</loc>
     <lastmod>2022-04-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
