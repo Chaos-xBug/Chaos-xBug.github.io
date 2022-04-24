@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>基于相似度的边缘提取</title>
+      <link href="/20220418-img-report/"/>
+      <url>/20220418-img-report/</url>
+      
+        <content type="html"><![CDATA[<h2 id="统计相似度所占百分比"><a href="#统计相似度所占百分比" class="headerlink" title="统计相似度所占百分比"></a>统计相似度所占百分比</h2><h3 id="素材图像"><a href="#素材图像" class="headerlink" title="素材图像"></a>素材图像</h3><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181108196.png" alt="image-20220418110807129"></p><h3 id="相似度分布"><a href="#相似度分布" class="headerlink" title="相似度分布"></a>相似度分布</h3><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181108443.png" alt="image-20220418110846668"></p><h3 id="相似度分布占比"><a href="#相似度分布占比" class="headerlink" title="相似度分布占比"></a>相似度分布占比</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">5 : 0.40026788655397105</span><br><span class="line">10 : 0.626774912031553</span><br><span class="line">15 : 0.7453136214204532</span><br><span class="line">20 : 0.8142202385237444</span><br><span class="line">25 : 0.8577027200956364</span><br><span class="line">30 : 0.886459076402205</span><br><span class="line">35 : 0.9067087257282348</span><br><span class="line">40 : 0.9214261250471747</span><br><span class="line">45 : 0.9328178480507326</span><br><span class="line">50 : 0.9414958017290462</span><br><span class="line">55 : 0.9484732866058905</span><br><span class="line">60 : 0.9540611645211746</span><br><span class="line">65 : 0.9586946420507719</span><br><span class="line">70 : 0.9625351492027757</span><br><span class="line">75 : 0.965824830989326</span><br><span class="line">80 : 0.9686967580927699</span><br><span class="line">85 : 0.9711236619306592</span><br><span class="line">90 : 0.9732746077141728</span><br><span class="line">95 : 0.9750601544928807</span><br></pre></td></tr></table></figure><h2 id="利用相似度提取边缘"><a href="#利用相似度提取边缘" class="headerlink" title="利用相似度提取边缘"></a>利用相似度提取边缘</h2><p>参数 = 60</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181114704.png" alt="image-20220418111451965"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181115525.png" alt="image-20220418111505861"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181121068.png" alt="image-20220418112116400"></p><p>参数 = 50</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181124242.png" alt="image-20220418112456456"></p><p>参数 = 40</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181123838.png" alt="image-20220418112352764"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181142434.png" alt="image-20220418114221377"></p><p>参数 = 30</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181123272.png" alt="image-20220418112302698"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181140015.png" alt="image-20220418114021045"></p><p>参数 = 20</p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181121868.png" alt="image-20220418112132487"></p><p><img src="https://cdn.jsdelivr.net/gh/Chaos-xBug/img/blog/202204181139757.png" alt="image-20220418113908174"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 图像处理 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图像处理 </tag>
+            
+            <tag> 相似度 </tag>
+            
+            <tag> 边缘检测 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>基于相邻格间相似度的边缘检测算法</title>
       <link href="/20220411-img-report/"/>
       <url>/20220411-img-report/</url>
