@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>基于深度学习的降噪思想</title>
+      <link href="/20220918-img-report/"/>
+      <url>/20220918-img-report/</url>
+      
+        <content type="html"><![CDATA[<p>经过各类文献调研，总结如下</p><h2 id="典型模型"><a href="#典型模型" class="headerlink" title="典型模型"></a>典型模型</h2><p>最典型的模型为CNN模型，各类基于CNN的模型也很多，其中如DnCNN -&gt; FFDNet -&gt; CBDNet -&gt; RIDNet -&gt; PMRID是一条越来越优的降噪网络主线</p><p>其他不同的模型也存在，但思路相仿</p><h2 id="降噪思路"><a href="#降噪思路" class="headerlink" title="降噪思路"></a>降噪思路</h2><h3 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h3><p>残差思想</p><h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><ol><li>有干净图像数据集X</li><li>利用特定噪声类型，生成特殊噪声数据集V</li><li>利用加噪算法合成X与V，生成图像数据集Y（即X + V = Y）</li><li>将X与Y配对，进行训练</li></ol><h4 id="预测"><a href="#预测" class="headerlink" title="预测"></a>预测</h4><p>输入Y，进行盲去噪</p><p>预测输出V‘，从而能较容易得到X’ = Y - V‘</p><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>该种残差思想，无需考虑单个像素点是否为噪声（无需求出结果），只需要预测出残差，并进行直接的修改</p><h2 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h2><p>这样的方法只能在实验中对标实验所需要的人为特定噪声（如，人为加入高斯噪声），但是噪声种类过多，在现实中，往往不能得到好的效果。</p><h2 id="改进方法"><a href="#改进方法" class="headerlink" title="改进方法"></a>改进方法</h2><p>另有论文（<a href="https://link.springer.com/article/10.1007%2Fs10489-019-01623-0">The classification and denoising of image noise based on deep neural networks</a>）提供了改进的方法</p><p>大致思路为，在降噪之前，先进行噪声种类的分类，为此，该论文做了分类网络。将多种常见噪声类型进行组合，生成数据集，用于该网络训练。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 图像处理 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图像处理 </tag>
+            
+            <tag> 降噪 </tag>
+            
+            <tag> 深度学习 </tag>
+            
+            <tag> CNN </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Deep image prior修复部分 inpainting的实现</title>
       <link href="/20220814-img-report/"/>
       <url>/20220814-img-report/</url>
