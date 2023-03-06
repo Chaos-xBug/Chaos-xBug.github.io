@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>基于模块差的取子图情况下的对比</title>
+      <link href="/20221204-img-report/"/>
+      <url>/20221204-img-report/</url>
+      
+        <content type="html"><![CDATA[<h2 id="k-2分为四张子图"><a href="#k-2分为四张子图" class="headerlink" title="k = 2分为四张子图"></a>k = 2分为四张子图</h2><p><img src="https://img.icvuln.com/202212061426059.png" alt="image-20221206142311826"><img src="https://img.icvuln.com/202212061426170.png" alt="image-20221206142332405"><img src="https://img.icvuln.com/202212061426599.png" alt="image-20221206142356624"><img src="https://img.icvuln.com/202212061426667.png" alt="image-20221206142419428"></p><h2 id="分别求max-min"><a href="#分别求max-min" class="headerlink" title="分别求max-min"></a>分别求max-min</h2><p><img src="https://img.icvuln.com/202212061426973.png" alt="image-20221206142449149"><img src="https://img.icvuln.com/202212061426854.png" alt="image-20221206142505702"></p><p><img src="https://img.icvuln.com/202212061426018.png" alt="image-20221206142519696"><img src="https://img.icvuln.com/202212061427090.png" alt="image-20221206142529628"></p><h2 id="比对"><a href="#比对" class="headerlink" title="比对"></a>比对</h2><p><img src="https://img.icvuln.com/202212061428243.png" alt="image-20221206142819898"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 图像处理 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 图像处理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>基于模块差的统计情况呈现</title>
       <link href="/20221113-img-report/"/>
       <url>/20221113-img-report/</url>
